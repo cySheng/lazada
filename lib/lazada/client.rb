@@ -19,9 +19,15 @@ module Lazada
 
     base_uri 'https://api.sellercenter.lazada.com.my'
 
-    def initialize(api_key, user_id)
+    # Valid opts:
+    # - tld: Top level domain to use (.com.my, .sg, .th...). Default: com.my
+    # - debug: $stdout, Rails.logger. Log http requests
+    def initialize(api_key, user_id, opts = {})
       @api_key = api_key
       @user_id = user_id
+
+      self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
+      self.class.debug_output opts[:debug] if opts[:debug].present?
     end
 
     protected
