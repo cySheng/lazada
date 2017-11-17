@@ -33,7 +33,7 @@ module Lazada
     protected
 
     def request_url(action, options = {})
-      current_time_zone = 'Kuala Lumpur'
+      current_time_zone = 'UTC'
       timestamp = Time.now.in_time_zone(current_time_zone).iso8601
 
       parameters = {
