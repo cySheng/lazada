@@ -25,6 +25,7 @@ module Lazada
     def initialize(api_key, user_id, opts = {})
       @api_key = api_key
       @user_id = user_id
+      @timezone = opts[:timezone] || 'UTC'
 
       self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
       self.class.debug_output opts[:debug] if opts[:debug].present?
@@ -33,7 +34,7 @@ module Lazada
     protected
 
     def request_url(action, options = {})
-      current_time_zone = 'UTC'
+      current_time_zone = @timezone
       timestamp = Time.now.in_time_zone(current_time_zone).iso8601
 
       parameters = {
