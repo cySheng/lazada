@@ -10,6 +10,10 @@ module Lazada
         url = request_url('GetOrders', params) if params.present?
         response = self.class.get(url)
 
+        unless response.code == 200
+          raise("Lazada API Orders problem. Code #{response&.status}. Response: #{response.inspect}")
+        end
+
         return response['SuccessResponse']['Body']['Orders'] if response['SuccessResponse'].present?
         response
       end
