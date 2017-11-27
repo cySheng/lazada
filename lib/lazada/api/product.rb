@@ -4,13 +4,13 @@ module Lazada
       def get_products(status = 'all')
         url = request_url('GetProducts', { 'filter' => status })
         response = self.class.get(url)
-
+        byebug
         unless response.code == 200
-          raise("Lazada API Products Error. Code #{response&.status} Response: #{response.inspect}")
+          raise("Lazada API Products Error. Code #{response&.code} Response: #{response.inspect}")
         end
 
         unless response['SuccessResponse'].present?
-          raise("No Success Response Present. Code #{response&.status} Response: #{response.inspect}")
+          raise("No Success Response Present. Code #{response&.code} Response: #{response.inspect}")
         end
 
         response['SuccessResponse']['Body']['Products'] if response['SuccessResponse'].present?

@@ -11,7 +11,7 @@ module Lazada
         response = self.class.get(url)
 
         unless response.code == 200
-          raise("Lazada API Orders problem. Code #{response&.status}. Response: #{response.inspect}")
+          raise("Lazada API Orders problem. Code #{response&.code}. Response: #{response.inspect}")
         end
 
         return response['SuccessResponse']['Body']['Orders'] if response['SuccessResponse'].present?
