@@ -4,7 +4,7 @@ module Lazada
       def get_products(status = 'all')
         url = request_url('GetProducts', { 'filter' => status })
         response = self.class.get(url)
-        byebug
+
         unless response.code == 200
           raise("Lazada API Products Error. Code #{response&.code} Response: #{response.inspect}")
         end
