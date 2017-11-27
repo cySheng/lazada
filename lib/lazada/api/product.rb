@@ -9,6 +9,10 @@ module Lazada
           raise("Lazada API Products Error. Code #{response&.status} Response: #{response.inspect}")
         end
 
+        unless response['SuccessResponse'].present?
+          raise("No Success Response Present. Code #{response&.status} Response: #{response.inspect}")
+        end
+
         response['SuccessResponse']['Body']['Products'] if response['SuccessResponse'].present?
       end
 
