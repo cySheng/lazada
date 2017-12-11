@@ -7,6 +7,7 @@ require 'lazada/api/feed'
 require 'lazada/api/image'
 require 'lazada/api/order'
 require 'lazada/api/response'
+require 'lazada/exceptions/lazada'
 
 module Lazada
   class Client
@@ -26,6 +27,7 @@ module Lazada
       @api_key = api_key
       @user_id = user_id
       @timezone = opts[:timezone] || 'UTC'
+      @raise_exceptions = opts[:raise_exceptions] || true
 
       self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
       self.class.debug_output opts[:debug] if opts[:debug].present?
@@ -55,5 +57,23 @@ module Lazada
       url = "/?#{params}&Signature=#{signature}"
     end
 
+    def process_response_errors!(response)
+      return unless @raise_exceptions
+
+      parsed_response = Lazada::API::Response.new
+
+      if parsed_response.error?
+        raise Lazada::APIError.new(
+          "Lazada API Error: '#{parsed_response.header_error_message}'",
+          http_code: response&.code,
+          response: response&.inspect,
+          error_type: parsed_response.error_type,
+          error_code: parsed_response.error_code,
+          error_message: parsed_response.error_message,
+          error_detail: parsed_response.body_error_messages
+        )
+      end
+    end
   end
+
 end

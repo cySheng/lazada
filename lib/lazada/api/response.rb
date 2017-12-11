@@ -8,7 +8,7 @@ module Lazada
       end
 
       def request_id
-        response['SuccessResponse']['Head']['RequestId']
+        response.dig('SuccessResponse', 'Head', 'RequestId')
       end
 
       def success?
@@ -20,23 +20,38 @@ module Lazada
       end
 
       def warning?
-        response['SuccessResponse']['Body']['Warnings'].present?
+        response.dig('SuccessResponse', 'Body', 'Warnings').present?
       end
 
       def warning_messages
         hash = {}
-        response['SuccessResponse']['Body']['Warnings'].each do |warning|
+        response.dig('SuccessResponse', 'Body', 'Warnings').each do |warning|
           hash[warning['Field'].dup] = warning['Message']
         end
 
         hash
       end
 
-      def error_messages
-        return if response['ErrorResponse']['Body'].nil?
+      def error_message
+        response.dig('ErrorResponse', 'Head', 'ErrorMessage')
+      end
 
-        hash = {}
-        response['ErrorResponse']['Body']['Errors'].each do |error|
+      def error_type
+        response.dig('ErrorResponse', 'Head', 'ErrorType')
+      end
+
+      def error_code
+        response.dig('ErrorResponse', 'Head', 'ErrorCode')
+      end
+
+      def body_error_messages
+        return if response.dig('ErrorResponse').nil?
+
+        # Parent error coming in the header
+        hash = { error: error_message }
+
+        # Error coming in the body
+        response.dig('ErrorResponse', 'Body', 'Errors')&.each do |error|
           hash[error['Field'].dup] = error['Message']
         end
 
