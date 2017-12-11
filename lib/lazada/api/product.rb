@@ -5,15 +5,9 @@ module Lazada
         url = request_url('GetProducts', { 'filter' => status })
         response = self.class.get(url)
 
-        unless response.code == 200
-          raise("Lazada API Products Error. Code #{response&.code} Response: #{response.inspect}")
-        end
+        process_response_errors! response
 
-        unless response['SuccessResponse'].present?
-          raise("No Success Response Present. Code #{response&.code} Response: #{response.inspect}")
-        end
-
-        response['SuccessResponse']['Body']['Products'] if response['SuccessResponse'].present?
+        response['SuccessResponse']['Body']['Products']
       end
 
       def create_product(params)
@@ -59,7 +53,9 @@ module Lazada
 
         response = self.class.get(url)
 
-        response['SuccessResponse']['Body']['Status'] if response['SuccessResponse'].present?
+        process_response_errors! response
+
+        response['SuccessResponse']['Body']['Status']
       end
 
       private
