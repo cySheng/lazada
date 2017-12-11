@@ -64,7 +64,7 @@ module Lazada
 
       if parsed_response.error?
         raise Lazada::APIError.new(
-          "Lazada API Error: '#{parsed_response.header_error_message}'",
+          "Lazada API Error: '#{parsed_response.error_message}'",
           http_code: response&.code,
           response: response&.inspect,
           error_type: parsed_response.error_type,
