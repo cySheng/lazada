@@ -60,7 +60,7 @@ module Lazada
     def process_response_errors!(response)
       return unless @raise_exceptions
 
-      parsed_response = Lazada::API::Response.new
+      parsed_response = Lazada::API::Response.new(response)
 
       if parsed_response.error?
         raise Lazada::APIError.new(

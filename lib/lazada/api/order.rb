@@ -10,28 +10,27 @@ module Lazada
         url = request_url('GetOrders', params) if params.present?
         response = self.class.get(url)
 
-        unless response.code == 200
-          raise("Lazada API Orders problem. Code #{response&.code}. Response: #{response.inspect}")
-        end
+        process_response_errors! response
 
-        return response['SuccessResponse']['Body']['Orders'] if response['SuccessResponse'].present?
-        response
+        return response['SuccessResponse']['Body']['Orders']
       end
 
       def get_order(id)
         url = request_url('GetOrder', { 'OrderId' => id })
         response = self.class.get(url)
 
-        return response['SuccessResponse']['Body']['Orders'] if response['SuccessResponse'].present?
-        response
+        process_response_errors! response
+
+        return response['SuccessResponse']['Body']['Orders']
       end
 
       def get_order_items(id)
         url = request_url('GetOrderItems', { 'OrderId' => id })
         response = self.class.get(url)
 
-        return response['SuccessResponse']['Body']['OrderItems'] if response['SuccessResponse'].present?
-        response
+        process_response_errors! response
+
+        return response['SuccessResponse']['Body']['OrderItems']
       end
     end
   end

@@ -27,6 +27,8 @@ module Lazada
 
         response = self.class.post(url, body: params.to_xml(root: 'Request', skip_types: true, dasherize: false))
 
+        process_response_errors! response
+
         Lazada::API::Response.new(response)
       end
 
