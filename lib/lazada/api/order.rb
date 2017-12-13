@@ -4,7 +4,7 @@ module Lazada
       def get_orders(options = {})
         params = {}
         params['Status'] = options[:status] if options[:status].present?
-        params['CreatedAfter'] = options[:created_after].iso8601 if options[:created_after]
+        params['CreatedAfter'] = options[:created_after].iso8601 if options[:created_after].present?
 
         url = request_url('GetOrders', params)
         response = self.class.get(url)
