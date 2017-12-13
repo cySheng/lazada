@@ -1,5 +1,12 @@
 module Lazada
-  class APIError < StandardError
+
+  class LazadaError < StandardError
+    def initialize(message = nil)
+      super message
+    end
+  end
+
+  class APIError < LazadaError
     attr_reader :http_code
     attr_reader :response
 
