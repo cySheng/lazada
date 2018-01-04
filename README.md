@@ -62,7 +62,7 @@ client.get_categories
 ### Lazada::Client#get_category_attributes
 Returns a list of attributes with options for a given category.
 ```ruby
-cleint.get_category_attributes(primary_cateogory_id)
+cleint.get_category_attributes(primary_category_id)
 ```
 
 ### Lazada::Client#get_orders
