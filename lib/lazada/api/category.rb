@@ -9,8 +9,8 @@ module Lazada
         response
       end
 
-      def get_category_attributes(primary_cateogory_id)
-        url = request_url('GetCategoryAttributes', 'PrimaryCategory' => primary_cateogory_id)
+      def get_category_attributes(primary_category_id)
+        url = request_url('GetCategoryAttributes', 'PrimaryCategory' => primary_category_id)
         response = self.class.get(url)
 
         return response['SuccessResponse']['Body'] if response['SuccessResponse']
