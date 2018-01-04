@@ -26,6 +26,8 @@ The client is the base for all communication with the API.
 client = Lazada::Client.new(api_key, user_id)
 ```
 
+Default timezone is 'UTC'. Can be specified otherwise. Refer to lib/lazada/client.
+
 ## Lazada::Client methods
 ### Lazada::Client#get_products
 Get all or a range of products.
