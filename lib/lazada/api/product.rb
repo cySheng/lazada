@@ -77,6 +77,7 @@ module Lazada
         }
 
         params['Skus'] = {}
+        params['Skus']['Sku'] = {}
         params['Skus']['Sku'].merge(object)
         p params
         byebug
