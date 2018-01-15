@@ -64,16 +64,16 @@ module Lazada
 
       def product_params(object)
         params = {}
-        params['PrimaryCategory'] = object.delete[:primary_category]
+        params['PrimaryCategory'] = object.delete([:primary_category])
         params['SPUId'] = ''
         params['AssociatedSku'] = ''
         params['Attributes'] = {
-          'name' => object.delete[:name] || object.delete[:title],
-          'name_ms' => object.delete[:name_ms] || object.delete[:name] || object.delete[:title],
-          'short_description' => object.delete[:short_description] || object.delete[:description],
-          'brand' => object.delete[:brand] || 'Unbranded',
-          'warranty_type' => object.delete[:warranty_type] || 'No Warranty',
-          'model' => object.delete[:model]
+          'name' => object.delete([:name]) || object.delete([:title]),
+          'name_ms' => object.delete([:name_ms]) || object.delete([:name]) || object.delete([:title]),
+          'short_description' => object.delete([:short_description]) || object.delete([:description]),
+          'brand' => object.delete([:brand]) || 'Unbranded',
+          'warranty_type' => object.delete([:warranty_type]) || 'No Warranty',
+          'model' => object.delete([:model])
         }
 
         params['Skus'] = {}
