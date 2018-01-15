@@ -64,55 +64,56 @@ module Lazada
 
       def product_params(object)
         params = {}
-        params['PrimaryCategory'] = object[:primary_category]
+        params['PrimaryCategory'] = object.delete[:primary_category]
         params['SPUId'] = ''
         params['AssociatedSku'] = ''
         params['Attributes'] = {
-          'name' => object[:name] || object[:title],
-          'name_ms' => object[:name_ms] || object[:name] || object[:title],
-          'short_description' => object[:short_description] || object[:description],
-          'brand' => object[:brand] || 'Unbranded',
-          'warranty_type' => object[:warranty_type] || 'No Warranty',
-          'model' => object[:model]
+          'name' => object.delete[:name] || object.delete[:title],
+          'name_ms' => object.delete[:name_ms] || object.delete[:name] || object.delete[:title],
+          'short_description' => object.delete[:short_description] || object.delete[:description],
+          'brand' => object.delete[:brand] || 'Unbranded',
+          'warranty_type' => object.delete[:warranty_type] || 'No Warranty',
+          'model' => object.delete[:model]
         }
 
         params['Skus'] = {}
-        params['Skus']['Sku'] = {
-          'SellerSku' => object[:seller_sku] || object[:sku],
-          'size' => object[:variation] || object[:size],
-          'quantity' => object[:quantity],
-          'price' => object[:price],
-          'package_length' => object[:package_length] || object[:length],
-          'package_height' => object[:package_height] || object[:height],
-          'package_weight' => object[:package_weight] || object[:weight],
-          'package_width' => object[:package_width] || object[:width],
-          'package_content' => object[:package_content] || object[:box_content],
-          'tax_class' => object[:tax_class] || 'default',
-          'status' => object[:status]
-        }
+        params['Skus']['Sku'].merge(object)
+        # params['Skus']['Sku'] = {
+        #   'SellerSku' => object[:seller_sku] || object[:sku],
+        #   'size' => object[:variation] || object[:size],
+        #   'quantity' => object[:quantity],
+        #   'price' => object[:price],
+        #   'package_length' => object[:package_length] || object[:length],
+        #   'package_height' => object[:package_height] || object[:height],
+        #   'package_weight' => object[:package_weight] || object[:weight],
+        #   'package_width' => object[:package_width] || object[:width],
+        #   'package_content' => object[:package_content] || object[:box_content],
+        #   'tax_class' => object[:tax_class] || 'default',
+        #   'status' => object[:status]
+        # }
 
-        params['Skus']['Sku']['color'] = object[:color] if object[:color].present?
-        params['Skus']['Sku']['color_family'] = object[:color_family] if object[:color_family].present?
-        params['Skus']['Sku']['size'] = object[:size] if object[:size].present?
-        params['Skus']['Sku']['flavor'] = object[:flavor] if object[:flavor].present?
-        params['Skus']['Sku']['bedding_size_2'] = object[:bedding_size] if object[:bedding_size].present?
+        # params['Skus']['Sku']['color'] = object[:color] if object[:color].present?
+        # params['Skus']['Sku']['color_family'] = object[:color_family] if object[:color_family].present?
+        # params['Skus']['Sku']['size'] = object[:size] if object[:size].present?
+        # params['Skus']['Sku']['flavor'] = object[:flavor] if object[:flavor].present?
+        # params['Skus']['Sku']['bedding_size_2'] = object[:bedding_size] if object[:bedding_size].present?
 
-        params['Skus']['Sku']['Images'] = {}
-        params['Skus']['Sku']['Images'].compare_by_identity
+        # params['Skus']['Sku']['Images'] = {}
+        # params['Skus']['Sku']['Images'].compare_by_identity
 
-        if object[:images].present?
-          object[:images].each do |image|
-            url = migrate_image(image)
+        # if object[:images].present?
+        #   object[:images].each do |image|
+        #     url = migrate_image(image)
 
-            params['Skus']['Sku']['Images']['Image'.dup] = url
-          end
-        end
+        #     params['Skus']['Sku']['Images']['Image'.dup] = url
+        #   end
+        # end
 
-        # maximum image: 8
-        image_count = object[:images]&.size || 0
-        (8 - image_count).times.each do |a|
-          params['Skus']['Sku']['Images']['Image'.dup] = ''
-        end
+        # # maximum image: 8
+        # image_count = object[:images]&.size || 0
+        # (8 - image_count).times.each do |a|
+        #   params['Skus']['Sku']['Images']['Image'.dup] = ''
+        # end
 
         params
       end
