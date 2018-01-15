@@ -68,9 +68,9 @@ module Lazada
         params['SPUId'] = ''
         params['AssociatedSku'] = ''
         params['Attributes'] = {
-          'name' => object[:name],
-          'name_ms' => object[:name_ms] || object[:name],
-          'short_description' => object[:short_description],
+          'name' => object[:name] || object[:title],
+          'name_ms' => object[:name_ms] || object[:name] || object[:title],
+          'short_description' => object[:short_description] || object[:description],
           'brand' => object[:brand] || 'Unbranded',
           'warranty_type' => object[:warranty_type] || 'No Warranty',
           'model' => object[:model]
@@ -78,19 +78,20 @@ module Lazada
 
         params['Skus'] = {}
         params['Skus']['Sku'] = {
-          'SellerSku' => object[:seller_sku],
-          'size' => object[:variation],
+          'SellerSku' => object[:seller_sku] || object[:sku],
+          'size' => object[:variation] || object[:size],
           'quantity' => object[:quantity],
           'price' => object[:price],
-          'package_length' => object[:package_length],
-          'package_height' => object[:package_height],
-          'package_weight' => object[:package_weight],
-          'package_width' => object[:package_width],
-          'package_content' => object[:package_content],
+          'package_length' => object[:package_length] || object[:length],
+          'package_height' => object[:package_height] || object[:height],
+          'package_weight' => object[:package_weight] || object[:weight],
+          'package_width' => object[:package_width] || object[:width],
+          'package_content' => object[:package_content] || object[:box_content],
           'tax_class' => object[:tax_class] || 'default',
           'status' => object[:status]
         }
 
+        params['Skus']['Sku']['color'] = object[:color] if object[:color].present?
         params['Skus']['Sku']['color_family'] = object[:color_family] if object[:color_family].present?
         params['Skus']['Sku']['size'] = object[:size] if object[:size].present?
         params['Skus']['Sku']['flavor'] = object[:flavor] if object[:flavor].present?
