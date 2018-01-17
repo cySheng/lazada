@@ -81,7 +81,9 @@ module Lazada
         params['Skus'] = {}
         params['Skus']['Sku'] = {}
         params['Skus']['Sku'].merge!(object)
-        
+
+        p params
+
         # params['Skus']['Sku'] = {
         #   'SellerSku' => object[:seller_sku] || object[:sku],
         #   'size' => object[:variation] || object[:size],
