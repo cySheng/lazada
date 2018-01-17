@@ -67,20 +67,21 @@ module Lazada
         params['PrimaryCategory'] = object.delete("primary_category")
         params['SPUId'] = ''
         params['AssociatedSku'] = ''
-        params['Attributes'] = {
-          'name' => object.delete("title") || object.delete("name") ,
-          'name_ms' => object.delete("name_ms") || object.delete("name") || object.delete("title"),
-          'short_description' => object.delete("short_description") || object.delete("description"),
-          'brand' => object.delete("brand") || 'Unbranded',
-          'warranty_type' => object.delete("warranty_type") || 'No Warranty',
-          'model' => object.delete("model")
-        }
+        # params['Attributes'] = {
+        #   'name' => object.delete("title") || object.delete("name") ,
+        #   'name_ms' => object.delete("name_ms") || object.delete("name") || object.delete("title"),
+        #   'short_description' => object.delete("short_description") || object.delete("description"),
+        #   'brand' => object.delete("brand") || 'Unbranded',
+        #   'warranty_type' => object["warranty_type"] || 'No Warranty',
+        #   'model' => object.delete("model")
+        # }
+        params['Attributes'] = {}
+        params['Attributes'].merge!(object)
 
         params['Skus'] = {}
         params['Skus']['Sku'] = {}
         params['Skus']['Sku'].merge!(object)
-        p params
-        byebug
+        
         # params['Skus']['Sku'] = {
         #   'SellerSku' => object[:seller_sku] || object[:sku],
         #   'size' => object[:variation] || object[:size],
