@@ -115,6 +115,11 @@ module Lazada
           'warranty_type' => object.delete("warranty_type") || 'No Warranty',
           'model' => object.delete("model")
         }
+        p "This is the start of params before merge"
+        p params
+
+        p "This is the object"
+        p object
 
         params['Skus']['Sku'].merge!(object)
         params['Attributes'].merge!(object)
@@ -141,6 +146,8 @@ module Lazada
         # params['Skus']['Sku']['holding_capacity'] = object[:holding_capacity] if object[:holding_capacity].present?
         # params['Skus']['Sku']['compatibility_by_model'] = object[:compatibility_by_model] if object[:compatibility_by_model].present?
         # params['Skus']['Sku']['powerbank_capacity'] = object[:powerbank_capacity] if object[:powerbank_capacity].present?
+        # 
+        p "This is the end of params after merge"
         p params
         params
       end
