@@ -140,7 +140,7 @@ module Lazada
         # params['Skus']['Sku']['holding_capacity'] = object[:holding_capacity] if object[:holding_capacity].present?
         # params['Skus']['Sku']['compatibility_by_model'] = object[:compatibility_by_model] if object[:compatibility_by_model].present?
         # params['Skus']['Sku']['powerbank_capacity'] = object[:powerbank_capacity] if object[:powerbank_capacity].present?
-        
+        p params
         params
       end
     end
