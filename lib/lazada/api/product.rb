@@ -109,7 +109,8 @@ module Lazada
         params['Attributes'] = {
           'name' => object.delete("title") || object.delete("name") ,
           'name_ms' => object.delete("name_ms") || object.delete("name") || object.delete("title"),
-          'short_description' => object.delete("short_description") || object.delete("description"),
+          'description' => object.delete("description"),
+          'short_description' => object.delete("short_description") || object.delete("highlights"),
           'brand' => object.delete("brand") || 'Unbranded',
           'warranty_type' => object.delete("warranty_type") || 'No Warranty',
           'model' => object.delete("model")
