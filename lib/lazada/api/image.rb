@@ -18,6 +18,20 @@ module Lazada
 
         response['SuccessResponse'].present? ? response['SuccessResponse']['Body']['Image']['Url'] : ''
       end
+
+      def migrate_images(image_url_list)
+        url = request_url('MigrateImages')
+
+        # Allow duplicate keys
+        urls = {}.compare_by_identity
+        image_url_list.each { |url| urls.merge!({ String.new('Url') => url }) }
+
+        params = { 'Images' => urls }
+
+        response = self.class.post(url, body: params.to_xml(root: 'Request', skip_types: true))
+
+        response['SuccessResponse'].present? ? response['SuccessResponse']['Body']['Image']['Url'] : ''
+      end
     end
   end
 end
