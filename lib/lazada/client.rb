@@ -51,7 +51,7 @@ module Lazada
       }
 
       parameters = parameters.merge(options) if options.present?
-
+      p parameters
       parameters = Hash[parameters.sort{ |a, b| a[0] <=> b[0] }]
       params     = parameters.to_query
 
