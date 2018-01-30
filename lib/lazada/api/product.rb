@@ -115,40 +115,10 @@ module Lazada
           'warranty_type' => object.delete("warranty_type") || 'No Warranty',
           'model' => object.delete("model")
         }
-        p "This is the start of params before merge"
-        p params
-
-        p "This is the object"
-        p object
 
         params['Skus']['Sku'].merge!(object)
         params['Attributes'].merge!(object)
 
-        # params['Skus']['Sku']['size'] = object[:variation] if object[:variation].present?
-        # params['Skus']['Sku']['flavor'] = object[:flavor] if object[:flavor].present?
-
-        # params['Skus']['Sku']['status'] = object[:status] if object[:status].present?
-        # params['Skus']['Sku']['color'] = object[:color] if object[:color].present?
-        # params['Skus']['Sku']['color_family'] = object[:color_family] if object[:color_family].present?
-        # params['Skus']['Sku']['size'] = object[:size] if object[:size].present?
-
-        # params['Skus']['Sku']['bedding_size_2'] = object[:bedding_size] if object[:bedding_size].present?
-        # params['Skus']['Sku']['storage_capacity_new'] = object[:storage_capacity_new] if object[:storage_capacity_new].present?
-        # params['Skus']['Sku']['fan_dimensions'] = object[:fan_dimensions] if object[:fan_dimensions].present?
-        # params['Skus']['Sku']['writing_speed'] = object[:writing_speed] if object[:writing_speed].present?
-        # params['Skus']['Sku']['special_price'] = object[:special_price] if object[:special_price].present?
-        # params['Skus']['Sku']['special_from_date'] = object[:special_from_date] if object[:special_from_date].present?
-        # params['Skus']['Sku']['special_to_date'] = object[:special_to_date] if object[:special_to_date].present?
-        # params['Skus']['Sku']['seller_promotion'] = object[:seller_promotion] if object[:seller_promotion].present?
-        # params['Skus']['Sku']['fragrance_family'] = object[:fragrance_family] if object[:fragrance_family].present?
-        # params['Skus']['Sku']['color_hb'] = object[:color_hb] if object[:color_hb].present?
-        # params['Skus']['Sku']['units'] = object[:units] if object[:units].present?
-        # params['Skus']['Sku']['holding_capacity'] = object[:holding_capacity] if object[:holding_capacity].present?
-        # params['Skus']['Sku']['compatibility_by_model'] = object[:compatibility_by_model] if object[:compatibility_by_model].present?
-        # params['Skus']['Sku']['powerbank_capacity'] = object[:powerbank_capacity] if object[:powerbank_capacity].present?
-        # 
-        p "This is the end of params after merge"
-        p params
         params
       end
     end
