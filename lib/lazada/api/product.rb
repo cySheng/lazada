@@ -70,6 +70,7 @@ module Lazada
         params["UpdatedAfter"] = object[:updated_after] if object[:updated_after].present?
         params["UpdatedBefore"] = object[:updated_before] if object[:updated_before].present?
         params["Search"] = object[:search] if object[:search].present?
+        object[:filter] = "all" unless object[:filter].present?
         params["Filter"] = object[:filter] if object[:filter].present?
         params["Limit"] = object[:limit] if object[:limit].present?
         params["Options"] = object[:options] if object[:options].present?
