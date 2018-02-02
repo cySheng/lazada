@@ -2,7 +2,8 @@ module Lazada
   module API
     module Product
       def get_products(status = 'all')
-        url = request_url('GetProducts', { 'filter' => status })
+        params = get_product_params(status)
+        url = request_url('GetProducts', params)
         response = self.class.get(url)
 
         process_response_errors! response
@@ -61,6 +62,21 @@ module Lazada
       end
 
       private
+
+      def get_product_params(object)
+        params = {}
+        params["CreatedAfter"] = object[:created_after] if object[:created_after].present?
+        params["CreatedBefore"] = object[:created_before] if object[:created_before].present?
+        params["UpdatedAfter"] = object[:updated_after] if object[:updated_after].present?
+        params["UpdatedBefore"] = object[:updated_before] if object[:updated_before].present?
+        params["Search"] = object[:search] if object[:search].present?
+        params["Filter"] = object[:filter] if object[:filter].present?
+        params["Limit"] = object[:limit] if object[:limit].present?
+        params["Options"] = object[:options] if object[:options].present?
+        params["Offset"] = object[:offset] if object[:offset].present?
+        params["SkuSellerList"] = object[:sku_seller_list] if object[:sku_seller_list].present?
+        params
+      end
 
       def product_params(object)
         params = {}
