@@ -5,6 +5,8 @@ module Lazada
         params = {}
         params['Status'] = options[:status] if options[:status].present?
         params['CreatedAfter'] = options[:created_after].iso8601 if options[:created_after].present?
+        params['Limit'] = options[:limit] || 100
+        params['Offset'] = options[:offset] || 0
 
         url = request_url('GetOrders', params)
         response = self.class.get(url)

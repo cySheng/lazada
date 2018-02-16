@@ -28,7 +28,7 @@ module Lazada
     def initialize(api_key, user_id, opts = {})
       @api_key = api_key
       @user_id = user_id
-      @timezone = opts[:timezone] || 'UTC'
+      @timezone = opts[:timezone] || 'Singapore'
       @raise_exceptions = opts[:raise_exceptions] || true
 
       self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
