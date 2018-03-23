@@ -3,7 +3,6 @@ module Lazada
     module Order
       def get_orders(options = {})
         params = {}
-        params['Status'] = options[:status] if options[:status].present?
         params['CreatedAfter'] = options[:created_after].iso8601 if options[:created_after].present?
         params['Limit'] = options[:limit] || 100
         params['Offset'] = options[:offset] || 0

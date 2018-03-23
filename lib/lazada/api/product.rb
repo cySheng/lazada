@@ -113,7 +113,7 @@ module Lazada
         end
 
         # maximum image: 8
-        image_count = object[:images]&.size || 0
+        image_count = object[:images].size || 0
         (8 - image_count).times.each do |a|
           params['Skus']['Sku']['Images']['Image'.dup] = ''
         end
