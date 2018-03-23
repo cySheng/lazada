@@ -25,7 +25,6 @@ module Lazada
         url = request_url('UpdateProduct')
 
         params = { 'Product' => product_params(params) }
-
         response = self.class.post(url, body: params.to_xml(root: 'Request', skip_types: true, dasherize: false))
 
         process_response_errors! response
@@ -101,6 +100,18 @@ module Lazada
           'tax_class' => object.delete("tax_class") || 'default'
         }
 
+        if object[:special_price].present?
+          params['Skus']['Sku'].merge!({
+            'special_price' => object[:special_price],
+            'special_from_date' => object[:special_from_date],
+            'special_to_date' => object[:special_to_date],
+          })
+        end
+
+        params['Skus']['Sku']['color_family'] = object[:color_family] if object[:color_family].present?
+        params['Skus']['Sku']['size'] = object[:size] if object[:size].present?
+        params['Skus']['Sku']['flavor'] = object[:flavor] if object[:flavor].present?
+        params['Skus']['Sku']['bedding_size_2'] = object[:bedding_size] if object[:bedding_size].present?
         params['Skus']['Sku']['Images'] = {}
         params['Skus']['Sku']['Images'].compare_by_identity
 
