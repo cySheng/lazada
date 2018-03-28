@@ -12,76 +12,6 @@ module Lazada
       end
 
       def create_product(params)
- #        x = {"title"=>"1 dog",
- # "sku"=>"doggo-1",
- # "description"=>"<p>asdfasdfasdfa</p>",
- # "variants"=>
- #  [{"sku"=>"doggo-2",
- #    "size"=>"big",
- #    "quantity"=>1,
- #    "price"=> 111.00,
- #    "color_family"=>"Orchid Grey",
- #    "SellerSku"=>"asdfasdfasdf",
- #    "barcode_ean"=>"",
- #    "special_price"=>"",
- #    "special_from_date"=>"2018-03-24",
- #    "special_to_date"=>"2018-03-24",
- #    "package_weight"=>"1",
- #    "package_length"=>"1",
- #    "package_width"=>"1",
- #    "package_height"=>"1",
- #    "package_content"=>"1 x dog",
- #     "warranty_type"=>"Local Manufacturer Warranty",
- #     "warranty"=>"1 Month"},
- #   {"sku"=>"doggo-3",
- #    "size"=>"small",
- #    "quantity"=>2,
- #    "price"=> 111.00,
- #    "color_family"=>"Black",
- #    "SellerSku"=>"asdfasdf",
- #    "barcode_ean"=>"",
- #    "special_price"=>"",
- #    "special_from_date"=>"2018-03-24",
- #    "special_to_date"=>"2018-03-24",
- #    "package_weight"=>"1",
- #    "package_length"=>"1",
- #    "package_width"=>"1",
- #    "package_height"=>"1",
- #    "package_content"=>"1 x dog",
- #     "warranty_type"=>"Local Manufacturer Warranty",
- #     "warranty"=>"1 Month"}],
- # "box_content"=>"1 x dog",
- # "brand"=>"test carmen",
- # "warranty_type"=>"Local Manufacturer Warranty",
- # "warranty"=>"1 Month",
- # "name"=>"asdfasdfasdf",
- # "short_description"=>"<p>fasdfasdfasdf</p>",
- # "processor_type"=>"Other",
- # "wireless_connectivity"=>"Cellular (3G/4G)",
- # "io_ports"=>"VGA",
- # "software_offerings"=>"Indoor HDTV",
- # "touchpad"=>"Yes",
- # "ac_adapter"=>"Yes",
- # "graphics_memory_new"=>"2GB",
- # "battery_life"=>"6-10 Hour",
- # "hdd_size"=>"3.5TB",
- # "cpu_speed"=>"4-5 Ghz",
- # "cpu_brand"=>"Intel",
- # "operating_system"=>"Windows",
- # "graphics_card"=>"Intel",
- # "system_memory_new"=>"16GB",
- # "package_content"=>"sdfasdfasdf",
- # "name_ms"=>"asdfasdfasdf",
- # "delivery_option_standard"=>"Yes",
- # "delivery_option_economy"=>"Yes",
- # "delivery_option_express"=>"Yes",
- # "description_ms"=>"<p>asdfasdfasdfasdfasdfadsf</p>",
- # "tax_class"=>"default",
- # "Hazmat"=>["Flammable"],
- # "coming_soon"=>"2018-03-24",
- # "primary_category"=>"6208", 
- # "model" => "a1",
- # "highlights"=>"<p>Doggo x 1</p>\n"}
         url = request_url('CreateProduct')
 
         params = { 'Product' => product_params(params) }
@@ -166,16 +96,16 @@ module Lazada
           variant_params = {}
         
           variant_params = {
-            'SellerSku' => variant.delete("seller_sku") || variant.delete("sku"),
+            'SellerSku' => variant.delete("SellerSku") || variant.delete("sku"),
             'size' => variant.delete("variation") || variant.delete("size"),
             'quantity' => variant.delete("quantity"),
-            'price' => variant.delete("price"),
+            'price' => variant.delete("price").to_f,
             'package_length' => variant.delete("package_length") || variant.delete("length"),
             'package_height' => variant.delete("package_height") || variant.delete("height"),
             'package_weight' => variant.delete("package_weight") || variant.delete("weight"),
             'package_width' => variant.delete("package_width") || variant.delete("width"),
-            'package_content' => variant.delete("package_content") || variant.delete("box_content"),
-            'tax_class' => variant.delete("tax_class") || 'default'
+            'tax_class' => variant.delete("tax_class") || 'default',
+            "barcode_ean" => variant.delete("barcode_ean")
           }
           if variant["special_price"].present?
             variant_params.merge!({
@@ -183,7 +113,12 @@ module Lazada
               'special_from_date' => variant.delete("special_from_date"),
               'special_to_date' => variant.delete("special_to_date"),
             })
+          else 
+            variant.delete("special_price")
+            variant.delete("special_from_date")
+            variant.delete("special_to_date")
           end
+
           variant_params['color_family'] = variant.delete("color_family") if variant["color_family"].present?
           variant_params['size'] = variant.delete("size") if variant["size"].present?
           variant_params['flavor'] = variant.delete("flavor") if variant["flavor"].present?
@@ -267,7 +202,8 @@ module Lazada
           'short_description' => object.delete("short_description") || object.delete("highlights"),
           'brand' => object.delete("brand") || 'Unbranded',
           'warranty_type' => object.delete("warranty_type") || 'No Warranty',
-          'model' => object.delete("model")
+          'model' => object.delete("model"),
+          'package_content' => object.delete("package_content") || object.delete("box_content")
         }
 
         # params['Skus']['Sku'].merge!(object)
