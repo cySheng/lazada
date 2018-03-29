@@ -1,6 +1,5 @@
 require 'httparty'
 require 'active_support/core_ext/hash'
-require 'nokogiri'
 require 'pry'
 
 require 'lazada/api/product'
