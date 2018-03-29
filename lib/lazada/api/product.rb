@@ -16,11 +16,7 @@ module Lazada
 
         params = { 'Product' => product_params(params) }
 
-        params = Nokogiri::XML(params.to_xml(root: 'Request', skip_types: true, dasherize: false))
-        multiple_skus = params.at_xpath("//Sku").children
-        params.at_xpath("//Skus").children = multiple_skus
-
-        response = self.class.post(url, body: params.to_xml)
+        response = self.class.post(url, body: params.to_xml(root: 'Request', skip_types: true, dasherize: false))
 
         Lazada::API::Response.new(response)
       end
@@ -89,12 +85,13 @@ module Lazada
         params['AssociatedSku'] = ''
 
         params['Skus'] = {}
-        params['Skus']['Sku'] = []
+        params['Skus'].compare_by_identity
 
+        
         # start variant START
         object["variants"].each do |variant|
           variant_params = {}
-        
+          
           variant_params = {
             'SellerSku' => variant.delete("SellerSku") || variant.delete("sku"),
             'size' => variant.delete("variation") || variant.delete("size"),
@@ -105,8 +102,10 @@ module Lazada
             'package_weight' => variant.delete("package_weight") || variant.delete("weight"),
             'package_width' => variant.delete("package_width") || variant.delete("width"),
             'tax_class' => variant.delete("tax_class") || 'default',
+            'package_content' => object.delete("package_content") || object.delete("box_content"),
             "barcode_ean" => variant.delete("barcode_ean")
           }
+          
           if variant["special_price"].present?
             variant_params.merge!({
               'special_price' => variant.delete("special_price"),
@@ -119,6 +118,7 @@ module Lazada
             variant.delete("special_to_date")
           end
 
+
           variant_params['color_family'] = variant.delete("color_family") if variant["color_family"].present?
           variant_params['size'] = variant.delete("size") if variant["size"].present?
           variant_params['flavor'] = variant.delete("flavor") if variant["flavor"].present?
@@ -126,11 +126,13 @@ module Lazada
           variant_params['Images'] = {}
           variant_params['Images'].compare_by_identity
 
+
+          #TODO
           if variant["images"].present?
             variant["images"].each do |image|
               url = migrate_image(image)
 
-              variant_params['Sku']['Images']['Image'.dup] = url
+              variant_params['Images']['Image'.dup] = url
             end
 
             # maximum image: 8
@@ -142,7 +144,7 @@ module Lazada
             variant.delete("image") 
           end
 
-          params['Skus']['Sku'] << variant_params
+          params['Skus']['Sku'.dup] = variant_params
         end
 
         # END VARIANT
@@ -206,7 +208,6 @@ module Lazada
           'package_content' => object.delete("package_content") || object.delete("box_content")
         }
 
-        # params['Skus']['Sku'].merge!(object)
         params['Attributes'].merge!(object)
         params
       end
