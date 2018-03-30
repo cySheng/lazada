@@ -1,6 +1,7 @@
 require 'httparty'
 require 'active_support/core_ext/hash'
 require 'pry'
+require 'pry-byebug'
 
 require 'lazada/api/product'
 require 'lazada/api/category'
