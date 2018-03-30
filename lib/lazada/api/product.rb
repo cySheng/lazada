@@ -102,10 +102,10 @@ module Lazada
             'package_weight' => variant.delete("package_weight") || variant.delete("weight"),
             'package_width' => variant.delete("package_width") || variant.delete("width"),
             'tax_class' => variant.delete("tax_class") || 'default',
-            'package_content' => object.delete("package_content") || object.delete("box_content"),
+            'package_content' => variant.delete("package_content") || variant.delete("box_content"),
             "barcode_ean" => variant.delete("barcode_ean")
           }
-          
+
           if variant["special_price"].present?
             variant_params.merge!({
               'special_price' => variant.delete("special_price"),
