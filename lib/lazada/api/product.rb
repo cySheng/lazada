@@ -217,6 +217,7 @@ module Lazada
         }
 
         params['Attributes'].merge!(object)
+        params['Attributes'].delete("2_in_1_type") 
         params
       end
     end
