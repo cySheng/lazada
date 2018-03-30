@@ -12,63 +12,7 @@ module Lazada
       end
 
       def create_product(params)
-        x = {"title"=>"asdfasdf",
-         "sku"=>"asdfasdf",
-         "description"=>"<p>sdfadfasdfadsf</p>",
-         "variants"=>
-          [{"color_family"=>"Black",
-            "package_content"=>"asdfasdfasdf",
-            "SellerSku"=>"asdfasdfasdf",
-            "barcode_ean"=>"",
-            "quantity"=>"",
-            "price"=>"1",
-            "special_price"=>"",
-            "special_from_date"=>"2018-03-29",
-            "special_to_date"=>"2018-03-29",
-            "seller_promotion"=>"",
-            "package_weight"=>"1",
-            "package_length"=>"1",
-            "package_width"=>"1",
-            "package_height"=>"1",
-            "__images__"=>"",
-            "tax_class"=>"tax 6",
-            "std_search_keywords"=>"",
-            "coming_soon"=>"2018-03-29"}],
-         "box_content"=>"asdfadsfasdf",
-         "brand"=>"test carmen",
-         "model"=>"asdfasdf",
-         "warranty_type"=>"Local Manufacturer Warranty",
-         "warranty"=>"1 Month",
-         "name"=>"asdfasdf",
-         "short_description"=>"<p>asdfasdf</p>",
-         "processor_type"=>"Single-core",
-         "display_size"=>"3",
-         "wireless_connectivity"=>"Cellular (3G/4G)",
-         "io_ports"=>"VGA",
-         "software_offerings"=>"Skype",
-         "touchpad"=>"No",
-         "ac_adapter"=>"Yes",
-         "graphics_memory_new"=>"8GB & Up",
-         "battery_life"=>"21 hour and up",
-         "camera_front"=>"2-3MP",
-         "hdd_size"=>"3.5TB",
-         "cpu_speed"=>"4-5 Ghz",
-         "cpu_brand"=>"Xeon",
-         "operating_system"=>"Windows",
-         "graphics_card"=>"Integrated",
-         "system_memory_new"=>"16GB",
-         "2_in_1_type"=>["detachable"],
-         "name_ms"=>"asdfasdfasdf",
-         "delivery_option_standard"=>"Yes",
-         "delivery_option_economy"=>"Yes",
-         "delivery_option_express"=>"Yes",
-         "Hazmat"=>["Battery"],
-         "primary_category"=>"8863",
-         "highlights"=>"<p>sdfdasfsdf</p>\n"}
-        params = x
         url = request_url('CreateProduct')
-
-        binding.pry
 
         params = { 'Product' => product_params(params) }
 
@@ -148,64 +92,68 @@ module Lazada
         object["variants"].each do |variant|
           variant_params = {}
           
-          variant_params = {
-            'SellerSku' => variant.delete("SellerSku") || variant.delete("sku"),
-            'size' => variant.delete("variation") || variant.delete("size"),
-            'quantity' => variant.delete("quantity"),
-            'price' => variant.delete("price").to_f,
-            'package_length' => variant.delete("package_length") || variant.delete("length"),
-            'package_height' => variant.delete("package_height") || variant.delete("height"),
-            'package_weight' => variant.delete("package_weight") || variant.delete("weight"),
-            'package_width' => variant.delete("package_width") || variant.delete("width"),
-            'tax_class' => variant.delete("tax_class") || 'default',
-            'package_content' => variant.delete("package_content") || variant.delete("box_content"),
-            "barcode_ean" => variant.delete("barcode_ean")
-          }
+          variant.delete_if { |k, v| v.empty? || v.nil? }
 
-          if variant["special_price"].present?
-            variant_params.merge!({
-              'special_price' => variant.delete("special_price"),
-              'special_from_date' => variant.delete("special_from_date"),
-              'special_to_date' => variant.delete("special_to_date"),
-            })
-          else 
-            variant.delete("special_price")
-            variant.delete("special_from_date")
-            variant.delete("special_to_date")
-          end
+          params['Skus']['Sku'.dup] = variant
 
-          variant_params['coming_soon'] = variant.delete("coming_soon") if variant["coming_soon"].present?
-          variant_params['std_search_keywords'] = variant.delete("std_search_keywords") if variant["std_search_keywords"].present?
-          variant_params['seller_promotion'] = variant.delete("seller_promotion") if variant["seller_promotion"].present?
-          variant_params['color_family'] = variant.delete("color_family") if variant["color_family"].present?
-          variant_params['size'] = variant.delete("size") if variant["size"].present?
-          variant_params['flavor'] = variant.delete("flavor") if variant["flavor"].present?
-          variant_params['bedding_size_2'] = variant.delete("bedding_size") if variant["bedding_size"].present?
-          variant_params['Images'] = {}
-          variant_params['Images'].compare_by_identity
+          # variant_params = {
+          #   'SellerSku' => variant.delete("SellerSku") || variant.delete("sku"),
+          #   'size' => variant.delete("variation") || variant.delete("size"),
+          #   'quantity' => variant.delete("quantity"),
+          #   'price' => variant.delete("price").to_f,
+          #   'package_length' => variant.delete("package_length") || variant.delete("length"),
+          #   'package_height' => variant.delete("package_height") || variant.delete("height"),
+          #   'package_weight' => variant.delete("package_weight") || variant.delete("weight"),
+          #   'package_width' => variant.delete("package_width") || variant.delete("width"),
+          #   'tax_class' => variant.delete("tax_class") || 'default',
+          #   'package_content' => variant.delete("package_content") || variant.delete("box_content"),
+          #   "barcode_ean" => variant.delete("barcode_ean")
+          # }
+
+          # if variant["special_price"].present?
+          #   variant_params.merge!({
+          #     'special_price' => variant.delete("special_price"),
+          #     'special_from_date' => variant.delete("special_from_date"),
+          #     'special_to_date' => variant.delete("special_to_date"),
+          #   })
+          # else 
+          #   variant.delete("special_price")
+          #   variant.delete("special_from_date")
+          #   variant.delete("special_to_date")
+          # end
+
+          # variant_params['coming_soon'] = variant.delete("coming_soon") if variant["coming_soon"].present?
+          # variant_params['std_search_keywords'] = variant.delete("std_search_keywords") if variant["std_search_keywords"].present?
+          # variant_params['seller_promotion'] = variant.delete("seller_promotion") if variant["seller_promotion"].present?
+          # variant_params['color_family'] = variant.delete("color_family") if variant["color_family"].present?
+          # variant_params['size'] = variant.delete("size") if variant["size"].present?
+          # variant_params['flavor'] = variant.delete("flavor") if variant["flavor"].present?
+          # variant_params['bedding_size_2'] = variant.delete("bedding_size") if variant["bedding_size"].present?
+          # variant_params['Images'] = {}
+          # variant_params['Images'].compare_by_identity
 
 
-          #TODO
-          if variant["__images__"].present?
-            variant["__images__"].each do |image|
-              url = migrate_image(image)
+          # #TODO
+          # if variant["__images__"].present?
+          #   variant["__images__"].each do |image|
+          #     url = migrate_image(image)
 
-              variant_params['Images']['Image'.dup] = url
-            end
+          #     variant_params['Images']['Image'.dup] = url
+          #   end
 
-            # maximum image: 8
-            image_count = variant["__images__"].size || 0
-            (8 - image_count).times.each do |a|
-              variant['Sku']['Images']['Image'.dup] = ''
-            end
+          #   # maximum image: 8
+          #   image_count = variant["__images__"].size || 0
+          #   (8 - image_count).times.each do |a|
+          #     variant['Sku']['Images']['Image'.dup] = ''
+          #   end
 
-            variant.delete("image") 
-          end
+          #   variant.delete("image") 
+          # end
 
-          params['Skus']['Sku'.dup] = variant_params
+          # params['Skus']['Sku'.dup] = variant_params
         end
 
-        object.delete["variants"]
+        object.delete("variants")
 
         # END VARIANT
         
