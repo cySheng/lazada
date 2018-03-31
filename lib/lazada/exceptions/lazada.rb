@@ -4,6 +4,16 @@ module Lazada
     def initialize(message = nil)
       super message
     end
+
+    def to_s
+      s =  "Message: '#{super.to_s}'"
+
+      self.instance_variables.each do |iv|
+        s += ", #{iv.to_s.gsub(/@/, '')}: '#{self.instance_variable_get(iv)}'"
+      end
+  
+      s
+    end
   end
 
   class APIError < LazadaError
