@@ -6,6 +6,8 @@ module Lazada
         url = request_url('GetBrands', options)
         response = self.class.get(url)
 
+        process_response_errors! response
+
         return response['SuccessResponse']['Body'] if response['SuccessResponse']
         response
       end
