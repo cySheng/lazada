@@ -6,7 +6,7 @@ module Lazada
     end
 
     def detailed_description
-      s =  "Message: '#{super.to_s}'"
+      s =  "Message: '#{self.to_s}'"
 
       self.instance_variables.each do |iv|
         s += ", #{iv.to_s.gsub(/@/, '')}: '#{self.instance_variable_get(iv)}'"
