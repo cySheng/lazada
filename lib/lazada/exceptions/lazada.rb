@@ -5,7 +5,7 @@ module Lazada
       super message
     end
 
-    def to_s
+    def detailed_description
       s =  "Message: '#{super.to_s}'"
 
       self.instance_variables.each do |iv|
