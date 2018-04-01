@@ -72,7 +72,9 @@ module Lazada
           error_type: parsed_response.error_type,
           error_code: parsed_response.error_code,
           error_message: parsed_response.error_message,
-          error_detail: parsed_response.body_error_messages
+          error_detail: parsed_response.body_error_messages,
+          request_http_method: response&.request&.http_method&.to_s,
+          request_uri: response&.request&.uri&.to_s
         )
       end
     end
