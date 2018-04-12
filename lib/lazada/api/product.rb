@@ -97,8 +97,8 @@ module Lazada
           variant_params['Images'] = {}
           variant_params['Images'].compare_by_identity
 
-          if variant_params['Images'].present? 
-            variant_params['Images'].each do |image|
+          if variant_params['images'].present? 
+            variant_params['images'].each do |image|
               url = migrate_image(image)
               variant_params['Images']['Image'.dup] = url
             end
