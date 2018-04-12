@@ -1,9 +1,9 @@
 module Lazada
   module API
     module Product
-      def get_products(status = 'all')
-        params = get_product_params(status)
-        url = request_url('GetProducts', params)
+      def get_products(params = {})
+        converted_params = get_product_params(params)
+        url = request_url('GetProducts', converted_params)
         response = self.class.get(url)
 
         process_response_errors! response
@@ -64,6 +64,7 @@ module Lazada
 
       def get_product_params(object)
         params = {}
+        params["Status"] = object[:status] 
         params["CreatedAfter"] = object[:created_after] if object[:created_after].present?
         params["CreatedBefore"] = object[:created_before] if object[:created_before].present?
         params["UpdatedAfter"] = object[:updated_after] if object[:updated_after].present?

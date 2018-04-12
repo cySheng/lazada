@@ -32,7 +32,7 @@ module Lazada
       @user_id = user_id
       @timezone = opts[:timezone] || 'Singapore'
       @raise_exceptions = opts[:raise_exceptions] || true
-      @tld = opts[:tld]
+      @tld = opts[:tld] || ".com.my"
 
       # Definitely not thread safe, as the base uri is a class variable.
       # self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
