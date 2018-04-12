@@ -13,7 +13,58 @@ module Lazada
 
       def create_product(params)
         url = request_url('CreateProduct')
-
+        params = {"title"=>"Dota 2 Golden Hair Band",
+         "sku"=>"dota-hb-002",
+         "description"=>"<p>This is a cool valve</p>",
+         "images"=>["lXSWGjR.png", "peperope.jpg"],
+         "plain_image_urls"=>[],
+         "variants"=>
+          [{"color_family"=>"Black",
+            "size"=>"Int:3XS",
+            "package_content"=>"1 x&nbsp;Rohan Comfort Korean Style Wedges (16J36-Black)",
+            "SellerSku"=>"special-pepe",
+            "barcode_ean"=>"",
+            "quantity"=>"2",
+            "price"=>"99.0",
+            "special_price"=>"59.4",
+            "special_from_date"=>"2018-04-12",
+            "special_to_date"=>"2018-04-12",
+            "seller_promotion"=>"",
+            "package_weight"=>"0.7",
+            "package_length"=>"30",
+            "package_width"=>"17",
+            "package_height"=>"9",
+            "tax_class"=>"default",
+            "coming_soon"=>"2018-04-12",
+            "Images"=>
+             ["https://dinosync-staging.s3.amazonaws.com/image-uploads/lazada_variant/1/kid-partners-shotgun.jpg",
+              "https://dinosync-staging.s3.amazonaws.com/image-uploads/lazada_variant/1/2-lizards.jpg"]}],
+         "box_content"=>"1 x Box3 x Hair Tie",
+         "name"=>"Dota 2 Hairband",
+         "short_description"=>"Good product",
+         "color_family"=>"Black",
+         "brand"=>"2K Games",
+         "size"=>"Int:3XS",
+         "hair_accessories"=>"Hair clips and Pins",
+         "fa_pattern"=>"Patchwork",
+         "clothing_material"=>"Acrylic Wool",
+         "kid_years"=>"Babies (0-2yrs)",
+         "listed_year_season"=>"SPRING",
+         "kid_occasion"=>"Formal",
+         "warranty_type"=>"Local Manufacturer Warranty",
+         "SellerSku"=>"DOTA2-HB-001",
+         "warranty"=>"1 Month",
+         "name_ms"=>"Dota 2 Hair Band",
+         "price"=>"1000",
+         "package_content"=>"1 Box 1 Hair band",
+         "package_weight"=>"0.5",
+         "package_length"=>"0.5",
+         "package_width"=>"0.5",
+         "package_height"=>"0.5",
+         "tax_class"=>"tax 6",
+         "Hazmat"=>"Battery",
+         "primary_category"=>"11379",
+         "highlights"=>"<p>Exclusive Dota 2 Hair Tie</p>\n"}
         params = { 'Product' => product_params(params) }
 
         response = self.class.post(url, body: params.to_xml(root: 'Request', skip_types: true, dasherize: false))
@@ -87,7 +138,6 @@ module Lazada
         params['Skus'] = {}
         params['Skus'].compare_by_identity
 
-        
         # start variant START
         object["variants"].each do |variant|
           variant_params = {}
@@ -96,9 +146,9 @@ module Lazada
 
           variant_params['Images'] = {}
           variant_params['Images'].compare_by_identity
-
-          if variant_params['images'].present? 
-            variant_params['images'].each do |image|
+          
+          if variant['Images'].present? 
+            variant['Images'].each do |image|
               url = migrate_image(image)
               variant_params['Images']['Image'.dup] = url
             end
@@ -106,114 +156,12 @@ module Lazada
 
           variant.delete("Images")
 
+          variant.merge!(variant_params)
+
           params['Skus']['Sku'.dup] = variant
-
-          # variant_params = {
-          #   'SellerSku' => variant.delete("SellerSku") || variant.delete("sku"),
-          #   'size' => variant.delete("variation") || variant.delete("size"),
-          #   'quantity' => variant.delete("quantity"),
-          #   'price' => variant.delete("price").to_f,
-          #   'package_length' => variant.delete("package_length") || variant.delete("length"),
-          #   'package_height' => variant.delete("package_height") || variant.delete("height"),
-          #   'package_weight' => variant.delete("package_weight") || variant.delete("weight"),
-          #   'package_width' => variant.delete("package_width") || variant.delete("width"),
-          #   'tax_class' => variant.delete("tax_class") || 'default',
-          #   'package_content' => variant.delete("package_content") || variant.delete("box_content"),
-          #   "barcode_ean" => variant.delete("barcode_ean")
-          # }
-
-          # if variant["special_price"].present?
-          #   variant_params.merge!({
-          #     'special_price' => variant.delete("special_price"),
-          #     'special_from_date' => variant.delete("special_from_date"),
-          #     'special_to_date' => variant.delete("special_to_date"),
-          #   })
-          # else 
-          #   variant.delete("special_price")
-          #   variant.delete("special_from_date")
-          #   variant.delete("special_to_date")
-          # end
-
-          # variant_params['coming_soon'] = variant.delete("coming_soon") if variant["coming_soon"].present?
-          # variant_params['std_search_keywords'] = variant.delete("std_search_keywords") if variant["std_search_keywords"].present?
-          # variant_params['seller_promotion'] = variant.delete("seller_promotion") if variant["seller_promotion"].present?
-          # variant_params['color_family'] = variant.delete("color_family") if variant["color_family"].present?
-          # variant_params['size'] = variant.delete("size") if variant["size"].present?
-          # variant_params['flavor'] = variant.delete("flavor") if variant["flavor"].present?
-          # variant_params['bedding_size_2'] = variant.delete("bedding_size") if variant["bedding_size"].present?
-          # variant_params['Images'] = {}
-          # variant_params['Images'].compare_by_identity
-
-
-          # #TODO
-          # if variant["__images__"].present?
-          #   variant["__images__"].each do |image|
-          #     url = migrate_image(image)
-
-          #     variant_params['Images']['Image'.dup] = url
-          #   end
-
-          #   # maximum image: 8
-          #   image_count = variant["__images__"].size || 0
-          #   (8 - image_count).times.each do |a|
-          #     variant['Sku']['Images']['Image'.dup] = ''
-          #   end
-
-          #   variant.delete("image") 
-          # end
-
-          # params['Skus']['Sku'.dup] = variant_params
         end
 
         object.delete("variants")
-
-        # END VARIANT
-        
-        # params['Skus']['Sku'] = {
-        #   'SellerSku' => object.delete("seller_sku") || object.delete("sku"),
-        #   'size' => object.delete("variation") || object.delete("size"),
-        #   'quantity' => object.delete("quantity"),
-        #   'price' => object.delete("price"),
-        #   'package_length' => object.delete("package_length") || object.delete("length"),
-        #   'package_height' => object.delete("package_height") || object.delete("height"),
-        #   'package_weight' => object.delete("package_weight") || object.delete("weight"),
-        #   'package_width' => object.delete("package_width") || object.delete("width"),
-        #   'package_content' => object.delete("package_content") || object.delete("box_content"),
-        #   'tax_class' => object.delete("tax_class") || 'default'
-        # }
-
-        # if object["special_price"].present?
-        #   params['Skus']['Sku'].merge!({
-        #     'special_price' => object["special_price"],
-        #     'special_from_date' => object["special_from_date"],
-        #     'special_to_date' => object["special_to_date"],
-        #   })
-        # end
-
-        # params['Skus']['Sku']['color_family'] = object["color_family"] if object["color_family"].present?
-        # params['Skus']['Sku']['size'] = object["size"] if object["size"].present?
-        # params['Skus']['Sku']['flavor'] = object["flavor"] if object["flavor"].present?
-        # params['Skus']['Sku']['bedding_size_2'] = object["bedding_size"] if object["bedding_size"].present?
-        # params['Skus']['Sku']['Images'] = {}
-        # params['Skus']['Sku']['Images'].compare_by_identity
-
-        # if object[:images].present?
-        #   object[:images].each do |image|
-        #     url = migrate_image(image)
-
-        #     params['Skus']['Sku']['Images']['Image'.dup] = url
-        #   end
-        #   image_count = object[:images].size || 0
-        #   (8 - image_count).times.each do |a|
-        #     params['Skus']['Sku']['Images']['Image'.dup] = ''
-        #   end
-        # end
-
-        # maximum image: 8
-
-        
-        # object.delete("image") if object[:image].present?
-
 
         params['Attributes'] = {}
 
