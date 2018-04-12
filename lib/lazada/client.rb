@@ -32,8 +32,10 @@ module Lazada
       @user_id = user_id
       @timezone = opts[:timezone] || 'Singapore'
       @raise_exceptions = opts[:raise_exceptions] || true
+      @tld = opts[:tld]
 
-      self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
+      # Definitely not thread safe, as the base uri is a class variable.
+      # self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
       self.class.debug_output opts[:debug] if opts[:debug].present?
     end
 
@@ -58,7 +60,8 @@ module Lazada
       params     = parameters.to_query
 
       signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @api_key, params)
-      url = "/?#{params}&Signature=#{signature}"
+      
+      "https://api.sellercenter.lazada#{@tld}/?#{params}&Signature=#{signature}"
     end
 
     def process_response_errors!(response)
@@ -74,7 +77,9 @@ module Lazada
           error_type: parsed_response.error_type,
           error_code: parsed_response.error_code,
           error_message: parsed_response.error_message,
-          error_detail: parsed_response.body_error_messages
+          error_detail: parsed_response.body_error_messages,
+          request_http_method: response&.request&.http_method&.to_s,
+          request_uri: response&.request&.uri&.to_s
         )
       end
     end
