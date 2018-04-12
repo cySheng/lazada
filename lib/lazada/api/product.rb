@@ -64,7 +64,6 @@ module Lazada
 
       def get_product_params(object)
         params = {}
-        params["Status"] = object[:status] 
         params["CreatedAfter"] = object[:created_after] if object[:created_after].present?
         params["CreatedBefore"] = object[:created_before] if object[:created_before].present?
         params["UpdatedAfter"] = object[:updated_after] if object[:updated_after].present?
