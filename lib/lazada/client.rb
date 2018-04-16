@@ -10,6 +10,7 @@ require 'lazada/api/image'
 require 'lazada/api/order'
 require 'lazada/api/response'
 require 'lazada/api/brand'
+require 'lazada/api/shipment'
 require 'lazada/exceptions/lazada'
 
 module Lazada
@@ -21,6 +22,7 @@ module Lazada
     include Lazada::API::Image
     include Lazada::API::Order
     include Lazada::API::Brand
+    include Lazada::API::Shipment
 
     base_uri 'https://api.sellercenter.lazada.com.my'
 
