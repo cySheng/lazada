@@ -1,7 +1,7 @@
 module Lazada
   module API
     module Product
-      def get_products(params)
+      def get_products(params = {})
         converted_params = get_product_params(params)
         url = request_url('GetProducts', converted_params)
         response = self.class.get(url)

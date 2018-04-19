@@ -47,20 +47,21 @@ module Lazada
       current_time_zone = @timezone
       timestamp = Time.now.in_time_zone(current_time_zone).iso8601
 
+      # options["filter"] ? filter = options.delete("filter") : filter = ""
+
       parameters = {
         'Action' => action,
-        'Filter' => options.delete('filter'),
         'Format' => 'JSON',
         'Timestamp' => timestamp,
         'UserID' => @user_id,
         'Version' => '1.0'
       }
 
+      
       parameters = parameters.merge(options) if options.present?
-
       parameters = Hash[parameters.sort{ |a, b| a[0] <=> b[0] }]
       params     = parameters.to_query
-
+      
       signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @api_key, params)
       
       "https://api.sellercenter.lazada#{@tld}/?#{params}&Signature=#{signature}"
