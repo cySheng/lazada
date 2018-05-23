@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'lazada/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "lazada"
+  spec.name          = "lazada-dino"
   spec.version       = Lazada::VERSION
-  spec.authors       = ["Rothana Choun"]
-  spec.email         = ["rothana@yoolk.com"]
+  spec.authors       = ["Sheng Chang"]
+  spec.email         = ["cyusheng93@gmail.com"]
 
   spec.summary       = %q{A ruby wrapper for the Lazada API.}
   spec.description   = %q{A ruby wrapper for the Lazada API.}
-  spec.homepage      = "https://github.com/yoolk/lazada"
+  spec.homepage      = "https://github.com/cySheng/lazada"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
