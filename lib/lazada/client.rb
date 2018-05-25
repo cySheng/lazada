@@ -29,13 +29,12 @@ module Lazada
     # Valid opts:
     # - tld: Top level domain to use (.com.my, .sg, .th...). Default: com.my
     # - debug: $stdout, Rails.logger. Log http requests
-    def initialize(api_key, user_id, opts = {})
-      @api_key = api_key
-      @user_id = user_id
+    def initialize(app_key, app_secret, opts = {})
+      @app_key = app_key
+      @app_secret = app_secret
       @timezone = opts[:timezone] || 'Singapore'
       @raise_exceptions = opts[:raise_exceptions] || true
       @tld = opts[:tld] || ".com.my"
-
       # Definitely not thread safe, as the base uri is a class variable.
       # self.class.base_uri "https://api.sellercenter.lazada#{opts[:tld]}" if opts[:tld].present?
       self.class.debug_output opts[:debug] if opts[:debug].present?
@@ -45,26 +44,29 @@ module Lazada
 
     def request_url(action, options = {})
       current_time_zone = @timezone
-      timestamp = Time.now.in_time_zone(current_time_zone).iso8601
+      timestamp = (Time.now.utc.to_f * 1000).to_i
 
       # options["filter"] ? filter = options.delete("filter") : filter = ""
 
       parameters = {
-        'Action' => action,
-        'Format' => 'JSON',
-        'Timestamp' => timestamp,
-        'UserID' => @user_id,
-        'Version' => '1.0'
+        'app_key' => @app_key,
+        'sign_method' => 'sha256',
+        'timestamp' => timestamp,
       }
 
-      
       parameters = parameters.merge(options) if options.present?
       parameters = Hash[parameters.sort{ |a, b| a[0] <=> b[0] }]
-      params     = parameters.to_query
-      
-      signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @api_key, params)
-      
-      "https://api.sellercenter.lazada#{@tld}/?#{params}&Signature=#{signature}"
+
+      sign_str = ''
+      sign_str += action
+      parameters.each do |k,v|
+        sign_str += k.to_s()
+        sign_str += v.to_s()
+      end
+
+      signature = OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha256'), @app_secret, sign_str).upcase
+
+      "https://api.lazada#{@tld}/rest#{action}?#{parameters.to_query}&sign=#{signature}"
     end
 
     def process_response_errors!(response)
