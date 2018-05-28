@@ -2,10 +2,10 @@ module Lazada
   module API
     module Category
       def get_categories
-        url = request_url('GetCategoryTree')
+        url = request_url('/category/tree/get')
         response = self.class.get(url)
 
-        return response['SuccessResponse']['Body'] if response['SuccessResponse']
+        return response['data'] if response['code'] == "0"
         response
       end
 
