@@ -42,7 +42,7 @@ module Lazada
 
     protected
 
-    def request_url(action, options = {})
+    def request_url(action, options = {}, accessToken = nil)
       current_time_zone = @timezone
       timestamp = (Time.now.utc.to_f * 1000).to_i
 
@@ -54,7 +54,11 @@ module Lazada
         'timestamp' => timestamp,
       }
 
-      parameters = parameters.merge(options) if options.present?
+      if accessToken != nil
+        parameters["access_token"] = accessToken
+      end
+
+      parameters = parameters.merge(options.stringify_keys!) if options.present?
       parameters = Hash[parameters.sort{ |a, b| a[0] <=> b[0] }]
 
       sign_str = ''
