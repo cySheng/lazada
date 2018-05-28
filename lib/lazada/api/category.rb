@@ -10,10 +10,10 @@ module Lazada
       end
 
       def get_category_attributes(primary_category_id)
-        url = request_url('GetCategoryAttributes', 'PrimaryCategory' => primary_category_id)
+        url = request_url('/category/attributes/get', 'primary_category_id' => primary_category_id)
         response = self.class.get(url)
 
-        return response['SuccessResponse']['Body'] if response['SuccessResponse']
+        return response['data'] if response['code'] == "0"
         response
       end
     end
