@@ -2,15 +2,15 @@ module Lazada
   module API
     module Brand
       def get_brands(options = {})
-        options["Offset"] = 0 unless options["Offset"]
-        options["Limit"] = 100 unless options["Limit"]
+        options["offset"] = 0 unless options["offset"]
+        options["limit"] = 100 unless options["limit"]
 
-        url = request_url('GetBrands', options)
+        url = request_url('/brands/get', options)
         response = self.class.get(url)
 
         process_response_errors! response
-
-        return response['SuccessResponse']['Body'] if response['SuccessResponse']
+        
+        return response['data'] if response['code'] == "0"
         response
       end
     end

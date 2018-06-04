@@ -1,27 +1,27 @@
 module Lazada
   module API
     module Order
-      def get_orders(options = {})
+      def get_orders(options = {}, access_token)
         params = {}
-        params['CreatedAfter'] = options[:created_after].iso8601 if options[:created_after].present?
-        params['Limit'] = options[:limit] || 100
-        params['Offset'] = options[:offset] || 0
+        params['created_after'] = options[:created_after].iso8601 if options[:created_after].present?
+        params['limit'] = options[:limit] || 100
+        params['offset'] = options[:offset] || 0
 
-        url = request_url('GetOrders', params)
+        url = request_url('/orders/get', params)
         response = self.class.get(url)
 
         process_response_errors! response
 
-        return response['SuccessResponse']['Body']['Orders']
+        return response['data']['orders']
       end
 
       def get_order(id)
-        url = request_url('GetOrder', { 'OrderId' => id })
+        url = request_url('/order/items/get', { 'order_id' => id })
         response = self.class.get(url)
 
         process_response_errors! response
 
-        return response['SuccessResponse']['Body']['Orders']
+        return response['data']
       end
 
       def get_order_items(id)
